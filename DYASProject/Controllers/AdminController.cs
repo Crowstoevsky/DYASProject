@@ -42,9 +42,6 @@ namespace DYASProject.Controllers
             return View(viewModel);
         }
 
-
-
-
         [HttpPost]
         public async Task<IActionResult> AgregarEmpleado(EmpleadoIndexVM model)
         {
@@ -63,8 +60,6 @@ namespace DYASProject.Controllers
 
             return RedirectToAction(nameof(Empleados));
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> EditEmpleado(EmpleadoIndexVM model)
@@ -100,58 +95,22 @@ namespace DYASProject.Controllers
             return RedirectToAction(nameof(Empleados));
         }
 
-
-
-
-
-
-        [HttpPost]
-        public async Task<IActionResult> RegistrarEmpleado(EmpleadoVM model)
-        {
-            if (model.Password != model.PasswordConfirmed)
-            {
-                ViewData["Mensaje"] = "Las contraseñas no coinciden";
-                return View();
-            }
-
-            var nuevoEmpleado = new Empleado
-            {
-                Nombre = model.Nombre,
-                Email = model.Email,
-                Password = model.Password,
-                Rol = new Rol { IdRol = 2 }, // Asignación directa por Id
-            };
-
-            await _appDBcontext.Empleados.AddAsync(nuevoEmpleado);
-            await _appDBcontext.SaveChangesAsync();
-
-            if (nuevoEmpleado.IdEmpleado != 0)
-                return RedirectToAction("Login", "Acceso");
-
-            ViewData["Mensaje"] = "No se pudo crear el usuario";
-            return View();
-        }
-
-
-
         [HttpGet]
         public IActionResult Productos()
         {
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Stock()
+        public async Task<IActionResult> HistorialVentas()
         {
-            return View();
+
+            var viewModel = new EmpleadoIndexVM
+            {
+                EmpleadosList = await _appDBcontext.Empleados.Include(e => e.Rol).ToListAsync(),
+                RolesList = await _appDBcontext.Roles.ToListAsync(),
+                Empleado = new Empleado() // vacío para formulario
+            };
+            return View(viewModel);
         }
-
-        [HttpGet]
-        public IActionResult HistorialVentas()
-        {
-            return View();
-        }
-
-
     }
 }

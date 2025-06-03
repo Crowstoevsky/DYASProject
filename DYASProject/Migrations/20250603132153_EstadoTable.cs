@@ -5,7 +5,7 @@
 namespace DYASProject.Migrations
 {
     /// <inheritdoc />
-    public partial class VirtualRol : Migration
+    public partial class EstadoTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

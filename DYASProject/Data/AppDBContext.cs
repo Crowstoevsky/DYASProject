@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿    using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using DYASProject.Models;
 
@@ -19,6 +19,7 @@ namespace DYASProject.Data
         public DbSet<StockSucursal> StockSucursales { get; set; }
         public DbSet<Sucursal> Sucursales { get; set; }
         public DbSet<Venta> Ventas { get; set; }
+        public DbSet<Estado> Estados { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

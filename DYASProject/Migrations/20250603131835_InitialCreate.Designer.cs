@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DYASProject.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250602234122_VirtualRol")]
-    partial class VirtualRol
+    [Migration("20250603131835_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,13 +73,13 @@ namespace DYASProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PrecioUnitario")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
 
                     b.Property<int>("ProductoMotoID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
 
                     b.HasKey("IdDetalle");
 
@@ -126,6 +126,24 @@ namespace DYASProject.Migrations
                     b.HasIndex("RolId");
 
                     b.ToTable("Empleados");
+                });
+
+            modelBuilder.Entity("DYASProject.Models.Estado", b =>
+                {
+                    b.Property<int>("IdEstado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEstado"));
+
+                    b.Property<string>("NombreEstado")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("IdEstado");
+
+                    b.ToTable("Estados");
                 });
 
             modelBuilder.Entity("DYASProject.Models.MetodoPago", b =>
@@ -196,6 +214,9 @@ namespace DYASProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("EstadoId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaCreacion")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
@@ -217,6 +238,8 @@ namespace DYASProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("IdProducto");
+
+                    b.HasIndex("EstadoId");
 
                     b.HasIndex("ProveedorId");
 
@@ -339,7 +362,7 @@ namespace DYASProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
 
                     b.HasKey("IdVenta");
 
@@ -395,11 +418,19 @@ namespace DYASProject.Migrations
 
             modelBuilder.Entity("DYASProject.Models.ProductoMoto", b =>
                 {
+                    b.HasOne("DYASProject.Models.Estado", "Estado")
+                        .WithMany("ProductoMotos")
+                        .HasForeignKey("EstadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DYASProject.Models.Proveedor", "Proveedor")
                         .WithMany("Productos")
                         .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Estado");
 
                     b.Navigation("Proveedor");
                 });
@@ -458,6 +489,11 @@ namespace DYASProject.Migrations
             modelBuilder.Entity("DYASProject.Models.Empleado", b =>
                 {
                     b.Navigation("Ventas");
+                });
+
+            modelBuilder.Entity("DYASProject.Models.Estado", b =>
+                {
+                    b.Navigation("ProductoMotos");
                 });
 
             modelBuilder.Entity("DYASProject.Models.MetodoPago", b =>
