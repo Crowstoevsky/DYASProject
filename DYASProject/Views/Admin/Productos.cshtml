@@ -1,1 +1,172 @@
-﻿<h1>PRODUCTOS</h1>
+﻿@model List<DYASProject.ViewModels.ProductoMotoVM>
+
+@{
+    ViewData["Title"] = "Listado de Productos Moto";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addProductoModal">Agregar Producto</button>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>CC</th>
+                <th>Precio</th>
+                <th>Proveedor</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var moto in Model)
+            {
+                <tr>
+                    <td>@moto.Marca</td>
+                    <td>@moto.Modelo</td>
+                    <td>@moto.CC</td>
+                    <td>@moto.Precio.ToString("C")</td>
+                    <td>@moto.ProveedorNombre</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detalleModal_@moto.Id">Ver Detalles</button>
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal_@moto.Id">Editar</button>
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal_@moto.Id">Eliminar</button>
+                    </td>
+                </tr>
+
+                <!-- Modal Detalles -->
+                <div class="modal fade" id="detalleModal_@moto.Id" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detalles del Producto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Marca:</strong> @moto.Marca</p>
+                                <p><strong>Modelo:</strong> @moto.Modelo</p>
+                                <p><strong>CC:</strong> @moto.CC</p>
+                                <p><strong>Precio:</strong> @moto.Precio.ToString("C")</p>
+                                <p><strong>Proveedor:</strong> @moto.ProveedorNombre</p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Editar -->
+                <div class="modal fade" id="editModal_@moto.Id" tabindex="-1">
+                    <div class="modal-dialog">
+                        <form asp-action="EditProducto" method="post">
+                            <input type="hidden" name="Id" value="@moto.Id" />
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Editar Producto</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label>Marca</label>
+                                        <input type="text" class="form-control" name="Marca" value="@moto.Marca" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Modelo</label>
+                                        <input type="text" class="form-control" name="Modelo" value="@moto.Modelo" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>CC</label>
+                                        <input type="number" class="form-control" name="CC" value="@moto.CC" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Precio</label>
+                                        <input type="number" class="form-control" name="Precio" value="@moto.Precio" step="0.01" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Descripción</label>
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Proveedor</label>
+                                        <input type="text" class="form-control" name="ProveedorNombre" value="@moto.ProveedorNombre" required />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Modal Eliminar -->
+                <div class="modal fade" id="deleteModal_@moto.Id" tabindex="-1">
+                    <div class="modal-dialog">
+                        <form asp-action="DeleteProducto" method="post">
+                            <input type="hidden" name="id" value="@moto.Id" />
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title">Eliminar Producto</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Estás seguro de que deseas eliminar el producto <strong>@moto.Marca @moto.Modelo</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Agregar Producto -->
+<div class="modal fade" id="addProductoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form asp-action="AddProducto" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Marca</label>
+                        <input type="text" class="form-control" name="Marca" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Modelo</label>
+                        <input type="text" class="form-control" name="Modelo" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>CC</label>
+                        <input type="number" class="form-control" name="CC" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Precio</label>
+                        <input type="number" class="form-control" name="Precio" step="0.01" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>Descripción</label>
+                        <textarea class="form-control" name="Descripcion"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Proveedor</label>
+                        <input type="text" class="form-control" name="ProveedorNombre" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

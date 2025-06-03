@@ -79,7 +79,6 @@ namespace DYASProject.Controllers
             return RedirectToAction(nameof(Empleados));
         }
 
-
         [HttpPost]
         public async Task<IActionResult> DeleteEmpleado(int idEmpleado)
         {
@@ -94,9 +93,35 @@ namespace DYASProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult Productos()
+        public async Task<IActionResult> Productos()
         {
-            return View();
+
+            var productos = await _appDBcontext.ProductoMotos
+            .Include(p => p.Proveedor)
+            .Include(p => p.EstadoProductoMoto)
+            .Include(p => p.StockSucursal)
+                .ThenInclude(ss => ss.Sucursal)
+            .Select(p => new ProductoMotoVM
+            {
+                Id = p.IdProducto,
+                Marca = p.Marca,
+                Modelo = p.Modelo,
+                CC = p.CC,
+                FechaCreacion = p.FechaCreacion,
+                Anio = p.Anio,
+                Color = p.Color,
+                Precio = p.Precio,
+                ProveedorNombre = p.Proveedor.Nombre,
+                Estado = p.EstadoProductoMoto.NombreEstado,
+                StockPorSucursal = p.StockSucursal.Select(ss => new StockSucursalVM
+                {
+                    Sucursal = ss.Sucursal.Nombre,
+                    Cantidad = ss.Cantidad
+                }).ToList()
+            })
+            .ToListAsync();
+
+            return View(productos);
         }
 
         public async Task<IActionResult> HistorialVentas()

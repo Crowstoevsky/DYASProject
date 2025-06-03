@@ -4,6 +4,7 @@ using DYASProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DYASProject.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250603195658_AddingTwoTablesEstado")]
+    partial class AddingTwoTablesEstado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,6 +128,24 @@ namespace DYASProject.Migrations
                     b.ToTable("Empleados");
                 });
 
+            modelBuilder.Entity("DYASProject.Models.Estado", b =>
+                {
+                    b.Property<int>("IdEstado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEstado"));
+
+                    b.Property<string>("NombreEstado")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("IdEstado");
+
+                    b.ToTable("Estados");
+                });
+
             modelBuilder.Entity("DYASProject.Models.EstadoDevolucion", b =>
                 {
                     b.Property<int>("IdEstadoD")
@@ -140,7 +161,7 @@ namespace DYASProject.Migrations
 
                     b.HasKey("IdEstadoD");
 
-                    b.ToTable("EstadosDevolucion");
+                    b.ToTable("EstadoDevolucion");
                 });
 
             modelBuilder.Entity("DYASProject.Models.EstadoProductoMoto", b =>
@@ -158,7 +179,7 @@ namespace DYASProject.Migrations
 
                     b.HasKey("IdEstadoPM");
 
-                    b.ToTable("EstadosProductoMotos");
+                    b.ToTable("EstadoProductoMoto");
                 });
 
             modelBuilder.Entity("DYASProject.Models.MetodoPago", b =>
@@ -190,6 +211,9 @@ namespace DYASProject.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("int");
 
+                    b.Property<int>("EstadoDevolucionIdEstadoD")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaSolicitud")
                         .HasColumnType("datetime2");
 
@@ -202,12 +226,12 @@ namespace DYASProject.Migrations
 
                     b.HasKey("IdDevolucion");
 
-                    b.HasIndex("EstadoDId");
+                    b.HasIndex("EstadoDevolucionIdEstadoD");
 
                     b.HasIndex("VentaId")
                         .IsUnique();
 
-                    b.ToTable("OpcionesDevolucion");
+                    b.ToTable("OpcionesDevolucione");
                 });
 
             modelBuilder.Entity("DYASProject.Models.ProductoMoto", b =>
@@ -230,7 +254,13 @@ namespace DYASProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("EstadoIdEstado")
+                        .HasColumnType("int");
+
                     b.Property<int>("EstadoPMId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EstadoProductoMotoIdEstadoPM")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaCreacion")
@@ -255,7 +285,9 @@ namespace DYASProject.Migrations
 
                     b.HasKey("IdProducto");
 
-                    b.HasIndex("EstadoPMId");
+                    b.HasIndex("EstadoIdEstado");
+
+                    b.HasIndex("EstadoProductoMotoIdEstadoPM");
 
                     b.HasIndex("ProveedorId");
 
@@ -425,7 +457,7 @@ namespace DYASProject.Migrations
                 {
                     b.HasOne("DYASProject.Models.EstadoDevolucion", "EstadoDevolucion")
                         .WithMany("OpcionesDevolucion")
-                        .HasForeignKey("EstadoDId")
+                        .HasForeignKey("EstadoDevolucionIdEstadoD")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -442,9 +474,13 @@ namespace DYASProject.Migrations
 
             modelBuilder.Entity("DYASProject.Models.ProductoMoto", b =>
                 {
+                    b.HasOne("DYASProject.Models.Estado", null)
+                        .WithMany("ProductoMotos")
+                        .HasForeignKey("EstadoIdEstado");
+
                     b.HasOne("DYASProject.Models.EstadoProductoMoto", "EstadoProductoMoto")
                         .WithMany("ProductoMotos")
-                        .HasForeignKey("EstadoPMId")
+                        .HasForeignKey("EstadoProductoMotoIdEstadoPM")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -513,6 +549,11 @@ namespace DYASProject.Migrations
             modelBuilder.Entity("DYASProject.Models.Empleado", b =>
                 {
                     b.Navigation("Ventas");
+                });
+
+            modelBuilder.Entity("DYASProject.Models.Estado", b =>
+                {
+                    b.Navigation("ProductoMotos");
                 });
 
             modelBuilder.Entity("DYASProject.Models.EstadoDevolucion", b =>

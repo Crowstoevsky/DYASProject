@@ -24,9 +24,11 @@ namespace DYASProject.Models
         public decimal Precio { get; set; }
         [ForeignKey("ProveedorId")]
         public Proveedor Proveedor { get; set; }
-        [ForeignKey("EstadoId")]
-        public int EstadoId { get; set; }
-        public virtual Estado Estado { get; set; }
+        
+        public int EstadoPMId { get; set; }
+        [ForeignKey("EstadoPMId")]
+        public virtual EstadoProductoMoto EstadoProductoMoto { get; set; }
+
         public ICollection<StockSucursal> StockSucursal { get; set; }
         public ICollection<DetallesVenta> DetallesVentas { get; set; }
     }

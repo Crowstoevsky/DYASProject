@@ -14,6 +14,9 @@ namespace DYASProject.Models
         public string Motivo { get; set; }
 
         [Required,StringLength(10)]
-        public string Estado { get; set; } // pendiente, aprobada, rechazada
+        public int EstadoDId { get; set; }
+        [ForeignKey("EstadoDId")]
+        public virtual EstadoDevolucion EstadoDevolucion { get; set; }
+
     }
 }
