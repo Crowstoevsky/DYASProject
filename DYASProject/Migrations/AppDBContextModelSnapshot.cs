@@ -70,13 +70,13 @@ namespace DYASProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("PrecioUnitario")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
 
                     b.Property<int>("ProductoMotoID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
 
                     b.HasKey("IdDetalle");
 
@@ -89,11 +89,11 @@ namespace DYASProject.Migrations
 
             modelBuilder.Entity("DYASProject.Models.Empleado", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdEmpleado")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmpleado"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -118,7 +118,7 @@ namespace DYASProject.Migrations
                         .HasMaxLength(9)
                         .HasColumnType("nvarchar(9)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdEmpleado");
 
                     b.HasIndex("RolId");
 
@@ -336,7 +336,7 @@ namespace DYASProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
 
                     b.HasKey("IdVenta");
 

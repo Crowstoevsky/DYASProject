@@ -1,49 +1,61 @@
-﻿@model DYASProject.ViewModels.LoginVM;
+﻿@model DYASProject.ViewModels.LoginVM
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <!-- agregamos los links para nuestros files de estilo css y usamos asp append para hacerle un hashing a nuestros files-->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/App.style.css" asp-append-version="true" />
+<style>
+    ::placeholder {
+        color: #ccc !important;
+        opacity: 1;
+    }
 
-</head>
-<body>
-    <div class=" row mt-5 justify-content-center">
-        <div class=" col-sm-4">
-            <div class="card">
-                <div class="card-header">
-                    Login
-                </div>
-                <div class="card-body">
-                    <!-- permitimos acceso de asp a nuestro formulario para poder usar nuestra clase VM y poder manejar las peticiones-->
-                    <form asp-controller="Acceso" asp-action="Login" method="post">
+    input.form-control:focus {
+        background-color: #3a3b3c;
+        color: white;
+        border-color: #198754;
+        box-shadow: none;
+    }
 
-                        <input class="form-control mb-3 " type="text" placeholder="Correo" requierd asp-for="Email" />
-                        <input class="form-control mb-3 " type="password" placeholder="Contraseña" requierd asp-for="Password" />
-                        <div class=" d-grid gap-2 mb-3">
-                            <button class="btn btn-primary">Login</button>
-                        </div>
-                        <!--en caso de retornar un viewdata se crea un div para poder mostrar el mensaje-->
-                        @if (ViewData["Mensaje"] != null)
-                        {
-                            <div class="alert alert-danger" role="alert">
-                                @ViewData["Mensaje"]
-                            </div>
-                        }
-                    </form>
-                    <!--agregamos un ancor para poder movernos entre pestañas de registrarse y login-->
-                    No tienes una cuenta regist rada? <a asp-controller="Acceso" asp-action="Registrarse"> Registrarse</a>
-                </div>
-            </div>
-        </div>
+    .login-card {
+        min-width: 400px; 
+        margin: 40px auto; 
+        border-radius: 0.5rem;
+    }
 
+</style>
+
+<div class="card bg-dark text-white shadow login-card p-4">
+    <div class="card-header border-bottom border-secondary">
+        <h4 class="mb-0">Login</h4>
     </div>
-    <!--agregamos nuestros scripts para los frameworks de js y css-->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="card-body">
+        <form asp-controller="Acceso" asp-action="Login" method="post">
+            <div class="mb-3">
+                <input class="form-control bg-secondary text-white border-0"
+                       type="text"
+                       placeholder="Correo"
+                       required
+                       asp-for="Email" />
+            </div>
+            <div class="mb-3">
+                <input class="form-control bg-secondary text-white border-0"
+                       type="password"
+                       placeholder="Contraseña"
+                       required
+                       asp-for="Password" />
+            </div>
+            <div class="d-grid gap-2 mb-3">
+                <button class="btn btn-success">Iniciar sesión</button>
+            </div>
 
-</body>
-</html>
+            @if (ViewData["Mensaje"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewData["Mensaje"]
+                </div>
+            }
+        </form>
+
+        
+    </div>
+</div>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DYASProject.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250601214414_cinco")]
-    partial class cinco
+    [Migration("20250602234122_VirtualRol")]
+    partial class VirtualRol
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,11 +92,11 @@ namespace DYASProject.Migrations
 
             modelBuilder.Entity("DYASProject.Models.Empleado", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdEmpleado")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmpleado"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -121,7 +121,7 @@ namespace DYASProject.Migrations
                         .HasMaxLength(9)
                         .HasColumnType("nvarchar(9)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdEmpleado");
 
                     b.HasIndex("RolId");
 

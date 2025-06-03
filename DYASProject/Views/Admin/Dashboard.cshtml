@@ -1,5 +1,31 @@
-﻿@model DYASProject.ViewModels.LoginVM;
+﻿@model DYASProject.ViewModels.LoginVM
 @{
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
-<div class="body">Dashboard</div>
+<div class="body">
+    <h1>Dashboard</h1>
+
+    <!-- Botón para abrir el modal -->
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCookies">
+        Aceptar Cookies
+    </button>
+
+    <!-- Modal de Cookies -->
+    <div class="modal fade" id="modalCookies" tabindex="-1" aria-labelledby="modalCookiesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCookiesLabel">Política de Cookies</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    Usamos cookies para mejorar la experiencia del usuario y analizar el tráfico del sitio. ¿Aceptas el uso de cookies?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Rechazar</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

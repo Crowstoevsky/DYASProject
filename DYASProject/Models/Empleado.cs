@@ -9,7 +9,7 @@ namespace DYASProject.Models
     public class Empleado
     {
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int IdEmpleado { get; set; }
         [Required,StringLength(250)]
         public string Nombre { get; set; }
         [Required,StringLength(50)]
@@ -19,7 +19,8 @@ namespace DYASProject.Models
         [Required,StringLength(9)]
         public string Telefono { get; set; }
         [ForeignKey("RolId")]
-        public Rol Rol { get; set; }
+        public int RolId { get; set; }
+        public virtual Rol Rol { get; set; }
         public ICollection<Venta> Ventas { get; set; }
     }
 }

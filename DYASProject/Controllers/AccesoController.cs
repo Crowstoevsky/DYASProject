@@ -40,7 +40,7 @@ namespace DYASProject.Controllers
             }
 
             // Guardamos en sesión
-            HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
+            HttpContext.Session.SetInt32("IdUsuario", usuario.IdEmpleado);
             HttpContext.Session.SetString("Nombre", usuario.Nombre);
             HttpContext.Session.SetString("Rol", usuario.Rol.NombreRol);
 

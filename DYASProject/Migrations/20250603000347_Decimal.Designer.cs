@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DYASProject.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250601213419_cuatro")]
-    partial class cuatro
+    [Migration("20250603000347_Decimal")]
+    partial class Decimal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace DYASProject.Migrations
 
             modelBuilder.Entity("DYASProject.Models.Cliente", b =>
                 {
-                    b.Property<int>("ClienteId")
+                    b.Property<int>("IdCliente")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClienteId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCliente"));
 
                     b.Property<string>("DNI")
                         .IsRequired()
@@ -53,7 +53,7 @@ namespace DYASProject.Migrations
                         .HasMaxLength(9)
                         .HasColumnType("nvarchar(9)");
 
-                    b.HasKey("ClienteId");
+                    b.HasKey("IdCliente");
 
                     b.ToTable("Clientes");
                 });
@@ -69,42 +69,39 @@ namespace DYASProject.Migrations
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdCompra")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdMoto")
+                    b.Property<int>("CompraId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PrecioUnitario")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
+
+                    b.Property<int>("ProductoMotoID")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
 
                     b.HasKey("IdDetalle");
 
-                    b.HasIndex("IdCompra");
+                    b.HasIndex("CompraId");
 
-                    b.HasIndex("IdMoto");
+                    b.HasIndex("ProductoMotoID");
 
                     b.ToTable("DetallesVentas");
                 });
 
             modelBuilder.Entity("DYASProject.Models.Empleado", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdEmpleado")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmpleado"));
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("IdRol")
-                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -116,14 +113,17 @@ namespace DYASProject.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("RolId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Telefono")
                         .IsRequired()
                         .HasMaxLength(9)
                         .HasColumnType("nvarchar(9)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdEmpleado");
 
-                    b.HasIndex("IdRol");
+                    b.HasIndex("RolId");
 
                     b.ToTable("Empleados");
                 });
@@ -200,9 +200,6 @@ namespace DYASProject.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdProveedor")
-                        .HasColumnType("int");
-
                     b.Property<string>("Marca")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -216,9 +213,12 @@ namespace DYASProject.Migrations
                     b.Property<decimal>("Precio")
                         .HasColumnType("decimal(6,2)");
 
+                    b.Property<int>("ProveedorId")
+                        .HasColumnType("int");
+
                     b.HasKey("IdProducto");
 
-                    b.HasIndex("IdProveedor");
+                    b.HasIndex("ProveedorId");
 
                     b.ToTable("ProductoMotos");
                 });
@@ -326,28 +326,28 @@ namespace DYASProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdVenta"));
 
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmpleadoId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdCliente")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdEmpleado")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdMetodoPago")
+                    b.Property<int>("MetodoPagoId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("Decimal(6,2)");
 
                     b.HasKey("IdVenta");
 
-                    b.HasIndex("IdCliente");
+                    b.HasIndex("ClienteId");
 
-                    b.HasIndex("IdEmpleado");
+                    b.HasIndex("EmpleadoId");
 
-                    b.HasIndex("IdMetodoPago");
+                    b.HasIndex("MetodoPagoId");
 
                     b.ToTable("Ventas");
                 });
@@ -356,13 +356,13 @@ namespace DYASProject.Migrations
                 {
                     b.HasOne("DYASProject.Models.Venta", "Venta")
                         .WithMany("Detalles")
-                        .HasForeignKey("IdCompra")
+                        .HasForeignKey("CompraId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DYASProject.Models.ProductoMoto", "Moto")
                         .WithMany("DetallesVentas")
-                        .HasForeignKey("IdMoto")
+                        .HasForeignKey("ProductoMotoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -375,7 +375,7 @@ namespace DYASProject.Migrations
                 {
                     b.HasOne("DYASProject.Models.Rol", "Rol")
                         .WithMany("Empleados")
-                        .HasForeignKey("IdRol")
+                        .HasForeignKey("RolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -397,7 +397,7 @@ namespace DYASProject.Migrations
                 {
                     b.HasOne("DYASProject.Models.Proveedor", "Proveedor")
                         .WithMany("Productos")
-                        .HasForeignKey("IdProveedor")
+                        .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -427,19 +427,19 @@ namespace DYASProject.Migrations
                 {
                     b.HasOne("DYASProject.Models.Cliente", "Cliente")
                         .WithMany("Ventas")
-                        .HasForeignKey("IdCliente")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DYASProject.Models.Empleado", "Empleado")
                         .WithMany("Ventas")
-                        .HasForeignKey("IdEmpleado")
+                        .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DYASProject.Models.MetodoPago", "MetodoPago")
                         .WithMany("Ventas")
-                        .HasForeignKey("IdMetodoPago")
+                        .HasForeignKey("MetodoPagoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
