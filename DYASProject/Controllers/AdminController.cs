@@ -36,14 +36,11 @@ namespace DYASProject.Controllers
                 RolesList = await _appDBcontext.Roles.ToListAsync(),
                 Empleado = new Empleado() // vacío para formulario
             };
-
-            
-
             return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AgregarEmpleado(EmpleadoIndexVM model)
+        public async Task<IActionResult> AddEmpleado(EmpleadoIndexVM model)
         {
             Empleado nuevoEmpleado = new Empleado
             {
@@ -67,6 +64,7 @@ namespace DYASProject.Controllers
 
 
             var empleadoExistente = await _appDBcontext.Empleados.FindAsync(model.Empleado.IdEmpleado);
+            Console.WriteLine(model.Empleado.IdEmpleado.ToString());
             if (empleadoExistente == null)
                 return RedirectToAction(nameof(Empleados));
 

@@ -1,17 +1,14 @@
 ﻿@model DYASProject.ViewModels.EmpleadoIndexVM
 
-
-
 @{
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
     ViewData["Title"] = "Empleados";
     var roles = ViewBag.Rol as List<Rol>;
 }
 
-
-<div class="container" ">
+<div class="container mt-4">
     <h2>Gestión de Empleados</h2>
-    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#agregarEmpleadoModal">Agregar Empleado</button>
+    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addEmpleadoModal">Agregar Empleado</button>
 
     <table class="table table-bordered">
         <thead class="table-dark">
@@ -67,7 +64,7 @@
                                     <div class="mb-3">
                                         <label>Rol</label>
                                         <select class="form-select" asp-for="IdRol" asp-items="@(new SelectList(Model.RolesList, "IdRol", "NombreRol"))">
-                                            <option value="">Seleccione un rol</option>
+                                            <option value=""> Selecciona un Rol</option>
                                         </select>
                                     </div>
                                 </div>
@@ -77,7 +74,6 @@
                                 </div>
                             </div>
                         </form>
-
 
                     </div>
                 </div>
@@ -110,9 +106,9 @@
 </div>
 
 <!-- Modal Agregar Empleado -->
-<div class="modal fade" id="agregarEmpleadoModal" tabindex="-1">
+<div class="modal fade" id="addEmpleadoModal" tabindex="-1">
     <div class="modal-dialog">
-        <form asp-controller="Admin" asp-action="AgregarEmpleado" method="post">
+        <form asp-controller="Admin" asp-action="AddEmpleado" method="post">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Agregar Empleado</h5>
@@ -150,4 +146,3 @@
         </form>
     </div>
 </div>
-
