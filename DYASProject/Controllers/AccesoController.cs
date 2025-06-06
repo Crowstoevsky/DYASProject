@@ -49,7 +49,7 @@ namespace DYASProject.Controllers
                 return RedirectToAction("Dashboard", "Admin");
 
             if (usuario.Rol.NombreRol == "Vendedor")
-                return RedirectToAction("Index", "Ventas");
+                return RedirectToAction("Ventas", "Empleado");
 
             // Por defecto
             return RedirectToAction("Index", "Home");

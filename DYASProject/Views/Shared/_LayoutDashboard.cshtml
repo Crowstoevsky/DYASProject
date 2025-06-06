@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="d-flex" style="height: 100vh;">
+    <div class="d-flex"  >
         <!-- ASIDE -->
-        <aside class="bg-dark text-white p-3" style="width: 250px; height: 100%;">
+        <aside class=" text-white p-3" style=" background:#aad69f; width: 250px; height: 100vh; display: flex; position:fixed;">
             <h4 class="mb-4">Admin</h4>
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -28,7 +28,7 @@
         </aside>
 
         <!-- MAIN -->
-        <main class="p-4 flex-fill" style="background-color: #242424">
+        <main class="flex-fill" style="background-color: #242424; margin-left:250px;">
             @RenderBody()
         </main>
     </div>

@@ -20,7 +20,7 @@ namespace DYASProject.Models
         public DateOnly Anio { get; set; }
         [Required]
         public string Color { get; set; }
-        [Required, Column(TypeName = "decimal(6,2)")]
+        [Required, Column(TypeName = "decimal(8,2)")]
         public decimal Precio { get; set; }
         [ForeignKey("ProveedorId")]
         public Proveedor Proveedor { get; set; }

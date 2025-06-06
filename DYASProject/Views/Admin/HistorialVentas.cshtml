@@ -1,1 +1,87 @@
-﻿<h1>HISTORIAL VENTAS</h1>
+﻿@model DYASProject.ViewModels.VentaIndexVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+    ViewData["Title"] = "Motos";
+}
+<div style="background-color: #212121; padding: 120px; height: 100%"> 
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var venta in Model.Ventas)
+            {
+                <tr>
+                    <td>@venta.Fecha.ToString("dd/MM/yyyy")</td>
+                    <td>S/ @venta.Total.ToString("F2")</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detalleVenta_@venta.IdVenta">Detalles</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Modales fuera de la tabla -->
+    @foreach (var venta in Model.Ventas)
+    {
+        var cliente = Model.Clientes.FirstOrDefault(c => c.IdCliente == venta.Cliente.IdCliente);
+        var empleado = Model.Empleados.FirstOrDefault(e => e.IdEmpleado == venta.Empleado.IdEmpleado);
+        var metodo = Model.MetodosPago.FirstOrDefault(m => m.IdMetodo == venta.MetodoPago.IdMetodo);
+        var detalles = Model.DetallesVentas.Where(d => d.Venta.IdVenta == venta.IdVenta).ToList();
+
+        <div class="modal fade" id="detalleVenta_@venta.IdVenta" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title">Detalle de Venta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-4"><strong>Cliente:</strong> @cliente?.Nombre<br /><strong>DNI:</strong> @cliente?.DNI</div>
+                            <div class="col-md-4"><strong>Empleado:</strong> @empleado?.Nombre</div>
+                            <div class="col-md-4"><strong>Método de Pago:</strong> @metodo?.NombreMetodo</div>
+                        </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var det in detalles)
+                                {
+                                    var producto = Model.ProductosMotos.FirstOrDefault(p => p.IdProducto == det.Moto.IdProducto);
+                                    <tr>
+                                        <td>@producto?.Modelo</td>
+                                        <td>@det.Cantidad</td>
+                                        <td>S/ @det.PrecioUnitario.ToString("F2")</td>
+                                        <td>S/ @det.SubTotal.ToString("F2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <div class="text-end mt-3">
+                            <strong>Total:</strong> S/ @venta.Total.ToString("F2")
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

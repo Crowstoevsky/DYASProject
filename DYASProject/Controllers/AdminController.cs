@@ -95,45 +95,89 @@ namespace DYASProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Productos()
         {
-
-            var productos = await _appDBcontext.ProductoMotos
-            .Include(p => p.Proveedor)
-            .Include(p => p.EstadoProductoMoto)
-            .Include(p => p.StockSucursal)
-                .ThenInclude(ss => ss.Sucursal)
-            .Select(p => new ProductoMotoVM
+            ProductoMotoIndexVM productoMIVM = new ProductoMotoIndexVM
             {
-                Id = p.IdProducto,
-                Marca = p.Marca,
-                Modelo = p.Modelo,
-                CC = p.CC,
-                FechaCreacion = p.FechaCreacion,
-                Anio = p.Anio,
-                Color = p.Color,
-                Precio = p.Precio,
-                ProveedorNombre = p.Proveedor.Nombre,
-                Estado = p.EstadoProductoMoto.NombreEstado,
-                StockPorSucursal = p.StockSucursal.Select(ss => new StockSucursalVM
-                {
-                    Sucursal = ss.Sucursal.Nombre,
-                    Cantidad = ss.Cantidad
-                }).ToList()
-            })
-            .ToListAsync();
+                Estados = await _appDBcontext.EstadosProductoMotos.ToListAsync(),
+                Proveedores = await _appDBcontext.Proveedores.ToListAsync(),
+                Motos = await _appDBcontext.ProductoMotos.ToListAsync(),
+                Sucursales = await _appDBcontext.Sucursales.ToListAsync(),
+                StockSucursales = await _appDBcontext.StockSucursales.Include(ss => ss.Sucursal).ToListAsync()
+            };
 
-            return View(productos);
+            return View(productoMIVM);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddMoto(ProductoMotoIndexVM model)
+        {
+            ProductoMoto nuevaMoto = new ProductoMoto
+            {
+                Marca = model.Moto.Marca,
+                Modelo = model.Moto.Modelo,
+                CC = model.Moto.CC,
+                Anio = new DateOnly(2020, 1, 1), // Año 2020 como ejemplo TODO: ARREGLAR EL NULL    
+                FechaCreacion = DateTime.Now,   // Fecha y hora actual TODO: ARREGLAR EL NULL
+                Color = model.Moto.Color,
+                Precio = model.Moto.Precio,
+                EstadoPMId = model.IdEstadoPM,
+                Proveedor = await _appDBcontext.Proveedores.FindAsync(model.IdProveedor)
+            };
+
+            await _appDBcontext.ProductoMotos.AddAsync(nuevaMoto);
+            await _appDBcontext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Productos));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditMoto(ProductoMotoIndexVM model)
+        {
+            var motoExistente = await _appDBcontext.ProductoMotos.FindAsync(model.Moto.IdProducto);
+            if (motoExistente == null)
+                return RedirectToAction(nameof(Productos));
+
+            motoExistente.Marca = model.Moto.Marca;
+            motoExistente.Modelo = model.Moto.Modelo;
+            motoExistente.CC = model.Moto.CC;
+            
+            motoExistente.Anio = model.Moto.Anio;
+            motoExistente.Color = model.Moto.Color;
+            motoExistente.Precio = model.Moto.Precio;
+            motoExistente.EstadoPMId = model.IdEstadoPM;
+            motoExistente.Proveedor = await _appDBcontext.Proveedores.FindAsync(model.IdProveedor);
+
+            await _appDBcontext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Productos));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMoto(int idProducto)
+        {
+            var moto = await _appDBcontext.ProductoMotos.FindAsync(idProducto);
+            if (moto != null)
+            {
+                _appDBcontext.ProductoMotos.Remove(moto);
+                await _appDBcontext.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Productos));
         }
 
         public async Task<IActionResult> HistorialVentas()
         {
 
-            var viewModel = new EmpleadoIndexVM
+            var vm = new VentaIndexVM
             {
-                EmpleadosList = await _appDBcontext.Empleados.Include(e => e.Rol).ToListAsync(),
-                RolesList = await _appDBcontext.Roles.ToListAsync(),
-                Empleado = new Empleado() // vacío para formulario
+                Ventas = _appDBcontext.Ventas.ToList(),
+                Clientes = _appDBcontext.Clientes.ToList(),
+                Empleados = _appDBcontext.Empleados.ToList(),
+                MetodosPago = _appDBcontext.MetodosPago.ToList(),
+                DetallesVentas = _appDBcontext.DetallesVentas.ToList(),
+                ProductosMotos = _appDBcontext.ProductoMotos.ToList()
             };
-            return View(viewModel);
+
+            return View(vm);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace DYASProject.Models
         [ForeignKey("MetodoPagoId")]
         public MetodoPago MetodoPago { get; set; }
 
-        [Required, Column(TypeName = "Decimal(6,2)")]
+        [Required, Column(TypeName = "Decimal(8,2)")]
         public decimal Total { get; set; }
 
         public ICollection<DetallesVenta> Detalles { get; set; }

@@ -17,9 +17,9 @@ namespace DYASProject.Models
         [Required]
         public int Cantidad { get; set; }
 
-        [Required,Column(TypeName ="Decimal(6,2)")]
+        [Required,Column(TypeName ="Decimal(8,2)")]
         public decimal PrecioUnitario { get; set; }
-        [Required, Column(TypeName = "Decimal(6,2)")]
+        [Required, Column(TypeName = "Decimal(8,2)")]
         public decimal SubTotal { get; set; }
     }
 }

@@ -1,5 +1,102 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DYASProject.ViewModels.VentaIndexVM
 @{
+    ViewData["Title"] = "Registrar Venta";
 }
+
+<div class="bg-dark text-light p-4 rounded shadow">
+    <h2 class="mb-4 text-light">Registrar Venta</h2>
+
+    <form asp-controller="Ventas" asp-action="RegistrarVenta" method="post">
+        <!-- Datos del Cliente -->
+        <div class="mb-3">
+            <label class="form-label text-light">DNI del Cliente</label>
+            <div class="input-group">
+                <input type="text" class="form-control bg-secondary text-light border-0" asp-for="Cliente.DNI" />
+                <button type="submit" class="btn btn-primary" formaction="/Ventas/BuscarCliente">Buscar</button>
+            </div>
+        </div>
+
+        @if (Model.Cliente != null)
+        {
+            <div class="mb-3">
+                <label class="text-light">Nombre</label>
+                <input class="form-control bg-secondary text-light border-0" value="@Model.Cliente.Nombre" disabled />
+            </div>
+            <div class="mb-3">
+                <label class="text-light">Dirección</label>
+                <input class="form-control bg-secondary text-light border-0" value="@Model.Cliente.Direccion" disabled />
+            </div>
+        }
+        else
+        {
+            <!-- Formulario para registrar cliente nuevo -->
+            <h5 class="text-light">Nuevo Cliente</h5>
+            <div class="mb-3">
+                <label class="text-light">Nombre</label>
+                <input class="form-control bg-secondary text-light border-0" name="Cliente.Nombre" />
+            </div>
+            <div class="mb-3">
+                <label class="text-light">Dirección</label>
+                <input class="form-control bg-secondary text-light border-0" name="Cliente.Direccion" />
+            </div>
+        }
+
+        <!-- Método de pago -->
+        <div class="mb-3">
+            <label class="text-light">Método de Pago</label>
+            <select asp-for="MetodoPagoId" asp-items="@(new SelectList(Model.MetodosPago, "IdMetodo", "NombreMetodo"))" class="form-control bg-secondary text-light border-0">
+                <option value="">Seleccione un método</option>
+            </select>
+        </div>
+
+        <hr class="bg-light" />
+
+        <!-- Agregar producto -->
+        <h5 class="text-light">Agregar producto</h5>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="text-light">Producto</label>
+                <select asp-for="ProductoId" asp-items="@(new SelectList(Model.ProductosMotos, "IdProducto", "Modelo"))" class="form-control bg-secondary text-light border-0">
+                    <option value="">Seleccione un producto</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="text-light">Cantidad</label>
+                <input type="number" asp-for="Cantidad" class="form-control bg-secondary text-light border-0" />
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-outline-light w-100" formaction="/Ventas/AgregarProducto">Agregar</button>
+            </div>
+        </div>
+
+        <!-- Detalles de la venta -->
+        <h5 class="text-light">Productos agregados</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.DetallesVentas)
+                    {
+                        <tr>
+                            <td>@item.Moto.Modelo</td>
+                            <td>@item.Cantidad</td>
+                            <td>S/ @item.PrecioUnitario</td>
+                            <td>S/ @(item.Cantidad * item.PrecioUnitario)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-success">Registrar Venta</button>
+        </div>
+    </form>
+</div>
