@@ -4,58 +4,68 @@
 }
 
 <style>
-    ::placeholder {
-        color: #ccc !important;
-        opacity: 1;
+    .login-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 2rem;
+        color: #f1f1f1;
     }
 
-    input.form-control:focus {
+    h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: bold;
+    }
+
+    .form-control {
         background-color: #3a3b3c;
         color: white;
-        border-color: #198754;
-        box-shadow: none;
+        border: 1px solid #444;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
     }
 
-    .login-card {
-        min-width: 400px; 
-        margin: 40px auto; 
+        .form-control:focus {
+            border-color: #aad69f;
+            box-shadow: none;
+        }
+
+    ::placeholder {
+        color: #aaa;
+    }
+
+    .btn-login {
+        width: 100%;
+        background-color: #aad69f;
+        color: white;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-login:hover {
+            background-color: #aad69f;
+        }
+
+    .alert-danger {
+        margin-top: 1rem;
         border-radius: 0.5rem;
     }
-
 </style>
 
-<div class="card bg-dark text-white shadow login-card p-4">
-    <div class="card-header border-bottom border-secondary">
-        <h4 class="mb-0">Login</h4>
-    </div>
-    <div class="card-body">
-        <form asp-controller="Acceso" asp-action="Login" method="post">
-            <div class="mb-3">
-                <input class="form-control bg-secondary text-white border-0"
-                       type="text"
-                       placeholder="Correo"
-                       required
-                       asp-for="Email" />
-            </div>
-            <div class="mb-3">
-                <input class="form-control bg-secondary text-white border-0"
-                       type="password"
-                       placeholder="Contraseña"
-                       required
-                       asp-for="Password" />
-            </div>
-            <div class="d-grid gap-2 mb-3">
-                <button class="btn btn-success">Iniciar sesión</button>
-            </div>
+<div class="login-container">
+    <h2>Iniciar Sesión</h2>
+    <form asp-controller="Acceso" asp-action="Login" method="post">
+        <input class="form-control" type="text" placeholder="Correo electrónico" asp-for="Email" required />
+        <input class="form-control" type="password" placeholder="Contraseña" asp-for="Password" required />
+        <button class="btn-login">Entrar</button>
 
-            @if (ViewData["Mensaje"] != null)
-            {
-                <div class="alert alert-danger" role="alert">
-                    @ViewData["Mensaje"]
-                </div>
-            }
-        </form>
-
-        
-    </div>
+        @if (ViewData["Mensaje"] != null)
+        {
+            <div class="alert alert-danger">@ViewData["Mensaje"]</div>
+        }
+    </form>
 </div>

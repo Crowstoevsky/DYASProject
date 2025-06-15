@@ -7,39 +7,61 @@
     <h2 class="mb-4 text-light">Registrar Venta</h2>
 
     <form asp-controller="Ventas" asp-action="RegistrarVenta" method="post">
-        <!-- Datos del Cliente -->
+
+        <!-- PASO 1: Buscar Cliente -->
         <div class="mb-3">
             <label class="form-label text-light">DNI del Cliente</label>
             <div class="input-group">
-                <input type="text" class="form-control bg-secondary text-light border-0" asp-for="Cliente.DNI" />
+                <input type="text" class="form-control" asp-for="Cliente.DNI" />
                 <button type="submit" class="btn btn-primary" formaction="/Ventas/BuscarCliente">Buscar</button>
             </div>
         </div>
 
         @if (Model.Cliente != null)
         {
+            <!-- Mostrar datos del cliente existente -->
             <div class="mb-3">
                 <label class="text-light">Nombre</label>
-                <input class="form-control bg-secondary text-light border-0" value="@Model.Cliente.Nombre" disabled />
+                <input class="form-control" value="@Model.Cliente.Nombre" disabled />
             </div>
             <div class="mb-3">
                 <label class="text-light">Dirección</label>
-                <input class="form-control bg-secondary text-light border-0" value="@Model.Cliente.Direccion" disabled />
+                <input class="form-control" value="@Model.Cliente.Direccion" disabled />
+            </div>
+
+            <!-- PASO 2: Método de Pago -->
+            <div class="mb-3">
+                <label class="text-light">Método de Pago</label>
+                <select asp-for="MetodoPagoId" asp-items="@(new SelectList(Model.MetodosPago, "IdMetodo", "NombreMetodo"))" class="form-control">
+                    <option value="">Seleccione un método</option>
+                </select>
+            </div>
+
+            <!-- PASO 3: Agregar productos -->
+            <h5 class="text-light">Agregar producto</h5>
+            <!-- Campos ProductoId + Cantidad + Botón Agregar -->
+            <!-- Tabla Detalles de productos agregados -->
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-success">Registrar Venta</button>
             </div>
         }
         else
         {
-            <!-- Formulario para registrar cliente nuevo -->
+            <!-- Registrar nuevo cliente -->
             <h5 class="text-light">Nuevo Cliente</h5>
             <div class="mb-3">
                 <label class="text-light">Nombre</label>
-                <input class="form-control bg-secondary text-light border-0" name="Cliente.Nombre" />
+                <input class="form-control" name="Cliente.Nombre" />
             </div>
             <div class="mb-3">
                 <label class="text-light">Dirección</label>
-                <input class="form-control bg-secondary text-light border-0" name="Cliente.Direccion" />
+                <input class="form-control" name="Cliente.Direccion" />
             </div>
+            <button type="submit" class="btn btn-warning">Guardar Cliente y Continuar</button>
         }
+
+
 
         <!-- Método de pago -->
         <div class="mb-3">

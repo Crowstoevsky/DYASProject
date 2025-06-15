@@ -5,30 +5,83 @@
     <title>@ViewData["Title"] - Panel Admin</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            background-color: #121212;
+            color: auto;
+        }
+
+        aside {
+            background-color: #1e1e1e;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            color: #fff !important;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 6px;
+        }
+
+            .nav-link img {
+                width: 20px;
+                height: 20px;
+                filter: brightness(0) invert(1); 
+            }
+
+            .nav-link:hover {
+                background-color: #aad69f33; 
+                color: #aad69f !important;
+            }
+
+            .nav-link.active {
+                background-color: #aad69f;
+                color: #000 !important;
+                font-weight: bold;
+            }
+
+                .nav-link.active img {
+                    filter: none; 
+                }
+    </style>
 </head>
 <body>
-    <div class="d-flex"  >
+    <div class="d-flex">
         <!-- ASIDE -->
-        <aside class=" text-white p-3" style=" background:#aad69f; width: 250px; height: 100vh; display: flex; position:fixed;">
-            <h4 class="mb-4">Admin</h4>
+        <aside class="p-3" style="width: 250px; height: 100vh; position: fixed;">
+            <h4 class="mb-4 text-white">Admin</h4>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link text-white" asp-controller="Admin" asp-action="Dashboard">Dashboard</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["action"]!.ToString() == "Dashboard" ? "active" : "")" asp-controller="Admin" asp-action="Dashboard">
+                        <img src="~/img/icono-dashboard.png" alt="Dashboard" />
+                        Dashboard
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" asp-controller="Admin" asp-action="Empleados">Empleados</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["action"]!.ToString() == "Empleados" ? "active" : "")" asp-controller="Admin" asp-action="Empleados">
+                        <img src="~/img/icono-empleados.png" alt="Empleados" />
+                        Empleados
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" asp-controller="Admin" asp-action="Productos">Productos</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["action"]!.ToString() == "Productos" ? "active" : "")" asp-controller="Admin" asp-action="Productos">
+                        <img src="~/img/icono-motos.png" alt="Productos" />
+                        Productos
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" asp-controller="Admin" asp-action="HistorialVentas">Historial Ventas</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["action"]!.ToString() == "HistorialVentas" ? "active" : "")" asp-controller="Admin" asp-action="HistorialVentas">
+                        <img src="~/img/icono-historial.png" alt="Historial Ventas" />
+                        Historial Ventas
+                    </a>
                 </li>
             </ul>
         </aside>
 
         <!-- MAIN -->
-        <main class="flex-fill" style="background-color: #242424; margin-left:250px;">
+        <main class="flex-fill" style="margin-left: 250px; background-color: #242424;">
             @RenderBody()
         </main>
     </div>

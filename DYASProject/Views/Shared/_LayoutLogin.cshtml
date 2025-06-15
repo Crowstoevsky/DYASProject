@@ -15,34 +15,53 @@
 			background-color: #212121;
             display: flex;
             justify-content: center;
-            align-items: center;
-
-            
+            align-items: center; 
 
         }
-        .imagen{
-            width: 80%;
-            height: 80%;
+
+        .imagen {
             background-image: url('/img/logo.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        }
+        @@media (max-width: 768px) {
+            .imagen
+
+        {
+            display: none !important;
+        }
+
+        .login-container {
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .login-aside {
+            flex: 1 1 100%;
+        }
+
         }
     </style>
 </head>
-<body >
+<body style="margin: 0;">
 
-    <div class="imagen">
-    @RenderBody()
+    <div style="display: flex; height: 100vh; width: 100%; flex-wrap: wrap;">
+
+        <!-- Aside izquierdo: Imagen del negocio -->
+        <aside class="imagen" style="flex: 2; height: 100vh; background-color: #111;"></aside>
+
+        <!-- Aside derecho: Login -->
+        <aside class="login-aside" style="flex: 1; height: 100vh; background-color: #212121; display: flex; justify-content: center; align-items: center;">
+            @RenderBody()
+        </aside>
+
     </div>
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+
 </html>
